@@ -1,15 +1,21 @@
 import { insertCarToDOM } from './insert_car_to_the_dom';
 
+const extractFromIds = (ids) => {
+  const result = {};
+  ids.forEach((id) => {
+    const value = document.getElementById(id).value;
+    result[id] = value;
+  });
+  return result;
+};
+
 const postAPI = (event) => {
   const url = `https://wagon-garage-api.herokuapp.com/garage-603/cars`;
 
   event.preventDefault();
   console.log(event);
   // take all the information that the user has inputted
-  const brand = document.getElementById('brand').value;
-  const model = document.getElementById('model').value;
-  const plate = document.getElementById('plate').value;
-  const owner = document.getElementById('owner').value;
+  const body = extractFromIds(['brand', 'model', 'plate', 'owner']);
 
   // fetch the api to create a car with that information
   const options = {
@@ -17,14 +23,7 @@ const postAPI = (event) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(
-      {
-        brand: brand,
-        model: model,
-        owner: owner,
-        plate: plate
-      }
-    )
+    body: JSON.stringify(body)
   }
 
   fetch(url, options)
